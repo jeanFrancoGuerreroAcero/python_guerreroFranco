@@ -4,12 +4,16 @@ import json
 
 def abrirArchivo():
     miJSON=[]
-    with open('python_guerreroFranco/python_guerreroFranco/dia13/info.json','r') as openfile:
+    with open('dia13/info (1).json','r') as openfile:
         miJSON= json.load(openfile)
     return miJSON
 
 def guardarArchivo(miData):
-    with open("python_guerreroFranco/python_guerreroFranco/dia13/info.json","w") as outfile:
+    with open("dia13/info (1).json","w") as outfile:
+        json.dump(miData,outfile)
+
+def eliminarArchivo(miData,grupo):
+    with open("dia13/info (1).json","w") as outfile:
         json.dump(miData,outfile)
 
 
@@ -22,7 +26,7 @@ voleybol=True
 while voleybol :
     queGrupo=input("que grupo desea hacer la gestion t2/p1 :")
     if queGrupo=="t2":
-        print("Hola! Por favor escoge alguna de las opciones:\n1.Revisar estudiantes\n2.Modificar estudiante\n3.eliminar datos\n4.crear nuevo estudiante")
+        print("Hola! Por favor escoge alguna de las opciones:\n1.Revisar estudiantes\n2.Modificar estudiante\n3.eliminar datos\n4.crear nuevo estudiante\n5.salir del programa")
         x=int(input("Cual opción escoges:"))
         miInfo=[]
         if(x==1):
@@ -86,14 +90,14 @@ while voleybol :
                 print("se ha realizado el cambio")
                 contador=0
 
-            if(datoCambiar==4):
+            if(datoCambiar==4):##si escoge la opcion 4 va a cambiar la cedula
                 nuevaCedula= input("ingrese la nnueva cedula que tendra :")
                 miInfo[0]["estudiantes"][estudiante-1]["cedula"] = nuevaCedula
                 guardarArchivo(miInfo)
                 print("se ha relizado el cambio")
                 contador=0
 
-            if(datoCambiar==5):
+            if(datoCambiar==5):##si escoge la opcion 5 va a cambiar el email
                 nuevoEmail= input("ingrese el nuevo email :")
                 miInfo[0]["estudiantes"][estudiante-1]["email"]=nuevoEmail
                 guardarArchivo(miInfo)
@@ -101,7 +105,7 @@ while voleybol :
                 print("")
                 contador=0
 
-            if(datoCambiar==6):
+            if(datoCambiar==6):##si escoge la opcion 6 cambiara el git
                 nuevoGit= input("ingrese el nuevo GitHub :")
                 miInfo[0]["estudiantes"][estudiante-1]["GitHub"] = nuevoGit
                 guardarArchivo(miInfo)
@@ -125,39 +129,32 @@ while voleybol :
                 print("")
             contador = 0
 
-        elif (x==4):
+        elif (x==3):##eliminar un estudiante
             miInfo=abrirArchivo()
-            miInfo=print("los parametros a crear son\n")
-            idNuevo=input("ingrese el nuevo id :")
-            nombreCrear=input("ingrese el nombre del estudiante :")
-            apellidoCrear=input("ingrese el apellido :")
-            edadCrear=input("ingrese la edad :")
-            fechaCrear=input("ingrese la fevha de naciminento :")
-            cedulaCrear=input("ingrese la cedula :")
-            emailCrear=input("ingrese el email :")
-            githubCrear=input("ingrese el github :")
+            estudiante = int(input("Cual numero de identificacion vas a cambiar?"))
+            miInfo["estudiantes"].remove(estudiante)
+            print("se ha eliminado el estudiante")
+            guardarArchivo()
 
-            libro={
-                    "id": 3,
-                    "grupo": "t2",
-                    "estudiantes": [
-                        {
-                            "id": idNuevo,
-                            "nombre": nombreCrear,
-                            "apellido": apellidoCrear,
-                            "edad": edadCrear,
-                            "fechaNacimiento": fechaCrear,
-                            "cedula": cedulaCrear,
-                            "email": emailCrear,
-                            "github": githubCrear
-                        }
-                    ]
-                }
-            miInfo[0]["estudiantes"][estudiante-1] = libro
+        elif (x==4):##crear u nuevo estudiante
+
+            miInfo=abrirArchivo()
+
+            crearEstudiante={}
+            crearEstudiante["id"]=len (miInfo[0]["estudiantes"])+1
+            print("los parametros a crear son\n")
+            crearEstudiante["nombre"]=input("ingrese el nuevo nombre :")
+            crearEstudiante["apellido"]=input("ingrese el nuevo apellido :")
+            crearEstudiante["edad"]=input("ingrese la edad :")
+            crearEstudiante["fechaNacimiento"]=input("ingrese la edad de nacimiento :")
+            crearEstudiante["cedula"]=input("ingrese la cedula :")
+            crearEstudiante["email"]=input("ingrese el email :")
+            crearEstudiante["github"]=input("ingrese el github :")
+
+            miInfo[0]["estudiantes"].append(crearEstudiante)
             guardarArchivo(miInfo)
-            print("usuario creado")
             print("")
-
+            print("se creo el nuevo estudiante")
 
     ##el grupo p1######################################################
     if queGrupo=="p1":
@@ -266,61 +263,38 @@ while voleybol :
          ##para borrar lo elementos del archivo########################################
          
         elif (x==3):
+            
             miInfo=abrirArchivo()
-            contador = 0
-            for i in miInfo[1]["estudiantes"]:
-                contador = contador +1
-                print("################")
-                print(" ESTUDIANTE #",contador)
-                print("ID:",i["id"])
-                print("Nombre:",i["nombre"])
-                print("Apellido:",i["apellido"])
-                print("Edad",i["edad"])
-                print("Fecha de Nacimiento (DD-MM-AAAA):",i["fechaNacimiento"])
-                print("Cédula:",i["cedula"])
-                print("E-mail:",i["email"])
-                print("GitHub:",i["github"])
-                print("################")
-                print("")
-            contador = 0
             estudiante = int(input("Cual numero de identificacion vas a cambiar?"))
-            datoEliminar=int(input("Que te gustaría eliminar del estudiante, escogue una opcion :\n1.Apellido: \n2.nombre: \n3.edad: \n4.cedula: \n5.email: \n6.GitHub:"))
-            if (datoEliminar==1):
-                    borrarApellido = input("borrando apellido")
-                    miInfo[1]["estudiantes"][estudiante-1]["apellido"] = borrarApellido
-                    guardarArchivo(miInfo)
-                    print("Cambio realizado!")
-                    contador = 0
-            voleybol=False
+            miInfo["estudiantes"].remove(estudiante)
+            print("se ha eliminado el estudiante")
+            guardarArchivo()
+
+
         elif (x==4):
             miInfo=abrirArchivo()
-            miInfo=print("los parametros a crear son\n")
-            idNuevo=input("ingrese el nuevo id :")
-            nombreCrear=input("ingrese el nombre del estudiante :")
-            apellidoCrear=input("ingrese el apellido :")
-            edadCrear=input("ingrese la edad :")
-            fechaCrear=input("ingrese la fecha de naciminento :")
-            cedulaCrear=input("ingrese la cedula :")
-            emailCrear=input("ingrese el email :")
-            githubCrear=input("ingrese el github :")
 
-            libro={
-                        {
-                            "id": idNuevo,
-                            "nombre": nombreCrear,
-                            "apellido": apellidoCrear,
-                            "edad": edadCrear,
-                            "fechaNacimiento": fechaCrear,
-                            "cedula": cedulaCrear,
-                            "email": emailCrear,
-                            "github": githubCrear
-                        }
-                }
-            miInfo[1]["estudiantes"][estudiante-1]["cedula"]  = miInfo
+            crearEstudiante={}
+            crearEstudiante["id"]=len (miInfo[1]["estudiantes"])+1
+            print("los parametros a crear son\n")
+            crearEstudiante["nombre"]=input("ingrese el nuevo nombre :")
+            crearEstudiante["apellido"]=input("ingrese el nuevo apellido :")
+            crearEstudiante["edad"]=input("ingrese la edad :")
+            crearEstudiante["fechaNacimiento"]=input("ingrese la edad de nacimiento :")
+            crearEstudiante["cedula"]=input("ingrese la cedula :")
+            crearEstudiante["email"]=input("ingrese el email :")
+            crearEstudiante["github"]=input("ingrese el github :")
+
+            miInfo[1]["estudiantes"].append(crearEstudiante)
             guardarArchivo(miInfo)
-            print("usuario creado")
-            print("")   
+            print("")
+            print("se creo el nuevo estudiante")
 
+        elif(x==5):
+            print("hasta luego")
+            voleybol=False
+            exit()
+         
 ##realizado por jean franco guerrero acero -1093909111
                             
                             
