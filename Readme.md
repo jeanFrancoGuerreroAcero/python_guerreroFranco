@@ -1,8 +1,10 @@
 <center>
 
 # Repositorio Python
-</center>
+
 En este repositorio se realizaron diferentes tipos de problemas de python divididos entre dias
+
+</center>
 
 ## Descripcion 
 ### Dia 2 
